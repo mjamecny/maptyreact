@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import Copyright from "./Copyright"
 
 import { getCoords } from "./features/app/appSlice"
+import Map from "./Map"
 
 export default function App() {
   const dispatch = useDispatch()
@@ -108,7 +109,7 @@ export default function App() {
         <Copyright />
       </div>
 
-      <div id="map"></div>
+      <Map />
     </>
   )
 }
