@@ -1,6 +1,16 @@
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+
 import Copyright from "./Copyright"
 
+import { getCoords } from "./features/app/appSlice"
+
 export default function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getCoords())
+  }, [dispatch])
+
   return (
     <>
       <div className="sidebar">
