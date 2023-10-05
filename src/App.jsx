@@ -1,3 +1,5 @@
+import Copyright from "./Copyright"
+
 export default function App() {
   return (
     <>
@@ -44,7 +46,7 @@ export default function App() {
             <button className="form__btn">OK</button>
           </form>
 
-          <li className="workout workout--running" data-id="1234567890">
+          <li className="workout workout--running">
             <h2 className="workout__title">Running on April 14</h2>
             <div className="workout__details">
               <span className="workout__icon">🏃‍♂️</span>
@@ -68,7 +70,7 @@ export default function App() {
             </div>
           </li>
 
-          <li className="workout workout--cycling" data-id="1234567891">
+          <li className="workout workout--cycling">
             <h2 className="workout__title">Cycling on April 5</h2>
             <div className="workout__details">
               <span className="workout__icon">🚴‍♀️</span>
@@ -93,17 +95,7 @@ export default function App() {
           </li>
         </ul>
 
-        <p className="copyright">
-          &copy; Copyright by
-          <a
-            className="twitter-link"
-            href="https://twitter.com/jonasschmedtman"
-          >
-            Jonas Schmedtmann
-          </a>
-          . Use for learning or your portfolio. Don't use to teach. Don't claim
-          as your own.
-        </p>
+        <Copyright />
       </div>
 
       <div id="map"></div>
