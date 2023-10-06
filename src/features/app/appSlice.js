@@ -8,12 +8,12 @@ function getPosition() {
 
 export const getCoords = createAsyncThunk("app/getCoords", async function () {
   const positionObj = await getPosition()
-  // console.log(positionObj)
   return [positionObj.coords.latitude, positionObj.coords.longitude]
 })
 
 const initialState = {
   coords: [],
+  showForm: false,
   status: "idle",
   error: "",
 }
@@ -21,7 +21,11 @@ const initialState = {
 const appSlice = createSlice({
   name: "app",
   initialState,
-  reducers: {},
+  reducers: {
+    showForm: (state) => {
+      state.showForm = true
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(getCoords.pending, (state) => {
@@ -36,5 +40,5 @@ const appSlice = createSlice({
         state.error = "There was a problem getting your coordinates"
       }),
 })
-
+export const { showForm } = appSlice.actions
 export default appSlice.reducer
