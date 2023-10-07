@@ -7,7 +7,11 @@ const initialState = {
 const cycleSlice = createSlice({
   name: "cycle",
   initialState,
-  reducers: {},
+  reducers: {
+    addCycle: (state, action) => {
+      state.cycle.push(action.payload)
+    },
+  },
 })
 
 export default cycleSlice.reducer

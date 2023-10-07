@@ -7,7 +7,11 @@ const initialState = {
 const runSlice = createSlice({
   name: "run",
   initialState,
-  reducers: {},
+  reducers: {
+    addRun: (state, action) => {
+      state.run.push(action.payload)
+    },
+  },
 })
 
 export default runSlice.reducer
