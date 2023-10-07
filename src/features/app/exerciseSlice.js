@@ -20,7 +20,7 @@ export const addExercise = createAsyncThunk(
 )
 
 const initialState = {
-  exercises: [],
+  exercises: JSON.parse(localStorage.getItem("exercises")) || [],
   exCoords: [],
 }
 
@@ -38,6 +38,15 @@ const exerciseSlice = createSlice({
     })
   },
 })
+
+export const saveExercisesToLocalStorage = (state) => (next) => (action) => {
+  const result = next(action)
+
+  const exercises = state.getState().exercise.exercises
+  localStorage.setItem("exercises", JSON.stringify(exercises))
+
+  return result
+}
 
 export const getExercises = (state) => state.exercise.exercises
 export const getExCoords = (state) => state.exercise.exCoords
