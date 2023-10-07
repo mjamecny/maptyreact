@@ -1,27 +1,11 @@
 import { useNavigate } from "react-router-dom"
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-]
+import { formatDate } from "./utils/helpers"
 
 export default function Workout({ exercise }) {
   const navigate = useNavigate()
   const { id, date, type, distance, duration, coords } = exercise
-
-  const newDate = new Date(date)
-  const day = newDate.getDate()
-  const month = months[newDate.getMonth()]
+  const dateStr = formatDate(date)
 
   function handleChangeCenter(coords) {
     const [lat, lng] = coords
@@ -37,9 +21,7 @@ export default function Workout({ exercise }) {
       onClick={() => handleChangeCenter(coords)}
     >
       <h2 className="workout__title">
-        {type === "running"
-          ? `Running on ${month} ${day}`
-          : `Cycling on ${month} ${day}`}
+        {type === "running" ? `Running on ${dateStr}` : `Cycling on ${dateStr}`}
       </h2>
       <div className="workout__details">
         <span className="workout__icon">

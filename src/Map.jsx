@@ -15,6 +15,7 @@ import "leaflet/dist/leaflet.css"
 import { setShowForm } from "./features/app/appSlice"
 import { getExercises } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
+import { formatDate } from "./utils/helpers"
 
 export default function Map() {
   const exercises = useSelector(getExercises)
@@ -50,31 +51,15 @@ export default function Map() {
       />
       {exercises.map((exercise) => {
         const { id, date, type, coords } = exercise
-        const months = [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ]
-        const newDate = new Date(date)
-        const day = newDate.getDate()
-        const month = months[newDate.getMonth()]
+        const dateStr = formatDate(date)
 
         return (
           <Marker key={id} position={coords}>
             <Popup className={`${type}-popup`}>
               <span>{`${
                 type === "running"
-                  ? `🏃‍♂️ Running on ${month} ${day}`
-                  : `🚴‍♀️ Cycling on ${month} ${day}`
+                  ? `🏃‍♂️ Running on ${dateStr}`
+                  : `🚴‍♀️ Cycling on ${dateStr}`
               }`}</span>
             </Popup>
           </Marker>
