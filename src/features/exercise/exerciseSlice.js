@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
 function calcPace(distance, duration) {
-  return duration / distance
+  return (duration / distance).toFixed(2)
 }
 
 function calcSpeed(distance, duration) {
-  return distance / (duration / 60)
+  return (distance / (duration / 60)).toFixed(2)
 }
 
 export const addExercise = createAsyncThunk(

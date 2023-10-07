@@ -12,7 +12,7 @@ export const getCoords = createAsyncThunk("app/getCoords", async function () {
 })
 
 const initialState = {
-  coords: [],
+  coords: null,
   showForm: false,
   status: "idle",
   error: "",

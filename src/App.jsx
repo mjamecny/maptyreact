@@ -1,20 +1,10 @@
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 
 import AppLayout from "./AppLayout"
 import Form from "./Form"
 
-import { getCoords } from "./features/app/appSlice"
-
 export default function App() {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(getCoords())
-  }, [dispatch])
-
   return (
     <>
       <BrowserRouter>
