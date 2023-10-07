@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
+import toast from "react-hot-toast"
 
 import { useUrlPosition } from "./hooks/useUrlPosition"
 import { addExercise } from "./features/app/exerciseSlice"
@@ -21,12 +22,19 @@ export default function Form() {
   function handleSubmit(e) {
     e.preventDefault()
 
-    function calcPace(distance, duration) {
-      return duration / distance
+    if (selectedExercise === "running" && !cadence) {
+      toast.error("Please fill the form")
+      return
     }
 
-    function calcSpeed(distance, duration) {
-      return distance / (duration / 60)
+    if (selectedExercise === "cycling" && !elevation) {
+      toast.error("Please fill the form")
+      return
+    }
+
+    if (!distance || !duration) {
+      toast.error("Please fill the form")
+      return
     }
 
     const exerciseObj = {
@@ -36,10 +44,6 @@ export default function Form() {
       type: selectedExercise,
       distance: Number(distance),
       duration: Number(duration),
-      [selectedExercise === "running" ? "pace" : "speed"]:
-        selectedExercise === "running"
-          ? calcPace(distance, duration)
-          : calcSpeed(distance, duration),
       [selectedExercise === "cycling" ? "elevation" : "cadence"]: Number(
         selectedExercise === "cycling" ? elevation : cadence
       ),
@@ -47,6 +51,7 @@ export default function Form() {
 
     dispatch(addExercise(exerciseObj))
     dispatch(setShowForm(false))
+    toast.success("Exercise added")
 
     setDistance("")
     setDuration("")
@@ -78,7 +83,6 @@ export default function Form() {
           placeholder="km"
           onChange={(e) => setDistance(e.target.value)}
           value={distance}
-          required
           name="distance"
         />
       </div>
@@ -89,7 +93,6 @@ export default function Form() {
           placeholder="min"
           onChange={(e) => setDuration(e.target.value)}
           value={duration}
-          required
           name="duration"
         />
       </div>
