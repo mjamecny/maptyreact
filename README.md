@@ -1,8 +1,13 @@
-# React + Vite
+# Mapty (React version)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mapty is an application that allows users to record and view their workouts on a map. Users can add two different types of workouts, such as running, cycling, and see their workout routes displayed on the map. Original project is from Jonas Schmedtmann which is part of his course. This version is built with React.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- add workout to your list
+- workouts saved to local storage
+- use your location to start adding workout
+
+## Screenshot
+
+![screenshot](https://i.imgur.com/985FkXN.png)
