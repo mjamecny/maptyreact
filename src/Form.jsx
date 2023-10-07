@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import toast from "react-hot-toast"
 
 import { useUrlPosition } from "./hooks/useUrlPosition"
-import { addExercise } from "./features/app/exerciseSlice"
+import { addExercise } from "./features/exercise/exerciseSlice"
 import { setShowForm } from "./features/app/appSlice"
 
 export default function Form() {
