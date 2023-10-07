@@ -13,7 +13,7 @@ import {
 
 import "leaflet/dist/leaflet.css"
 import { setShowForm } from "./features/app/appSlice"
-import { getExercises, getExCoords } from "./features/app/exerciseSlice"
+import { getExercises, getExCoords } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
 
 export default function Map() {

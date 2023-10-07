@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 
-import { setExCoords } from "./features/app/exerciseSlice"
+import { setExCoords } from "./features/exercise/exerciseSlice"
 
 const months = [
   "January",
