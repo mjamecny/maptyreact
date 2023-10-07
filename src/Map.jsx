@@ -78,7 +78,7 @@ export default function Map() {
 
         return (
           <Marker key={id} position={coords}>
-            <Popup>
+            <Popup className={`${type}-popup`}>
               <span>{`${
                 type === "running"
                   ? `🏃‍♂️ Running on ${month} ${day}`
