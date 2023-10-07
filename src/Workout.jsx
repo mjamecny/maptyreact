@@ -1,6 +1,4 @@
-import { useDispatch } from "react-redux"
-
-import { setExCoords } from "./features/exercise/exerciseSlice"
+import { useNavigate } from "react-router-dom"
 
 const months = [
   "January",
@@ -18,7 +16,7 @@ const months = [
 ]
 
 export default function Workout({ exercise }) {
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { id, date, type, distance, duration, coords } = exercise
 
   const newDate = new Date(date)
@@ -26,7 +24,8 @@ export default function Workout({ exercise }) {
   const month = months[newDate.getMonth()]
 
   function handleChangeCenter(coords) {
-    dispatch(setExCoords(coords))
+    const [lat, lng] = coords
+    navigate(`form?lat=${lat}&lng=${lng}`)
   }
 
   return (

@@ -13,12 +13,11 @@ import {
 
 import "leaflet/dist/leaflet.css"
 import { setShowForm } from "./features/app/appSlice"
-import { getExercises, getExCoords } from "./features/exercise/exerciseSlice"
+import { getExercises } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
 
 export default function Map() {
   const exercises = useSelector(getExercises)
-  const [exLat, exLng] = useSelector(getExCoords)
   const geoCords = useSelector((state) => state.app.coords)
 
   const [mapPosition, setMapPosition] = useState([40, 0])
@@ -36,13 +35,6 @@ export default function Map() {
       if (geoCords) setMapPosition(geoCords)
     },
     [geoCords]
-  )
-
-  useEffect(
-    function () {
-      if (exLat && exLng) setMapPosition([exLat, exLng])
-    },
-    [exLat, exLng]
   )
 
   return (
