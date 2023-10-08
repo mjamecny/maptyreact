@@ -9,10 +9,9 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="app" element={<AppLayout />}>
+          <Route path="/" element={<AppLayout />}>
             <Route path="form" element={<Form />} />
           </Route>
-          <Route index element={<Navigate replace to="app" />} />
         </Routes>
       </BrowserRouter>
       <Toaster
