@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
+import { FaTrash } from "react-icons/fa"
 
 import { formatDate } from "./utils/helpers"
 import { removeExercise } from "./features/exercise/exerciseSlice"
@@ -66,7 +67,7 @@ export default function Workout({ exercise }) {
         </span>
       </div>
       <button className="btn-delete" onClick={() => handleRemove(id)}>
-        X
+        <FaTrash />
       </button>
     </li>
   )
