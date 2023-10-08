@@ -264,8 +264,25 @@ a:visited {
   font-weight: 700;
 }
 
+.btn-filter {
+  border: 1px solid var(--color-brand--2);
+  background-color: transparent;
+  color: var(--color-light--2);
+}
+
+.btn-filter--active {
+  background-color: var(--color-brand--2);
+}
+
 .action-container {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.filter {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
   margin-bottom: 1rem;
 }

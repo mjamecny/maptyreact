@@ -5,6 +5,7 @@ import toast from "react-hot-toast"
 import Form from "./Form"
 import Workout from "./Workout"
 import SortBy from "./SortBy"
+import Filter from "./Filter"
 
 import { getExercises, removeAll } from "./features/exercise/exerciseSlice"
 
@@ -20,14 +21,34 @@ export default function Workouts() {
     navigate("/")
   }
 
+  const arrToFilter = [...exercises]
+
+  // FILTER
+  const filterValue = searchParams.get("type") || "all"
+
+  let filteredExercises
+
+  if (filterValue === "all") {
+    filteredExercises = arrToFilter
+  }
+
+  if (filterValue === "runnings") {
+    filteredExercises = arrToFilter.filter(
+      (exercise) => exercise.type === "running"
+    )
+  }
+  if (filterValue === "cyclings") {
+    filteredExercises = arrToFilter.filter(
+      (exercise) => exercise.type === "cycling"
+    )
+  }
+
   // SORT
   const sortBy = searchParams.get("sortBy") || "date-dsc"
   const [field, direction] = sortBy.split("-")
   const modifier = direction === "asc" ? 1 : -1
 
-  const arrToSort = [...exercises]
-
-  const sortedExercises = arrToSort.sort((a, b) => {
+  const sortedExercises = filteredExercises.sort((a, b) => {
     const fieldA = a[field]
     const fieldB = b[field]
     if (fieldA < fieldB) {
@@ -43,12 +64,15 @@ export default function Workouts() {
     <ul className="workouts">
       <Form />
       {exercises.length > 0 && (
-        <div className="action-container">
-          <button className="btn btn--delete-all" onClick={handleRemoveAll}>
-            Delete all
-          </button>
-          <SortBy />
-        </div>
+        <>
+          <div className="action-container">
+            <button className="btn btn--delete-all" onClick={handleRemoveAll}>
+              Delete all
+            </button>
+            <SortBy />
+          </div>
+          <Filter filterField="type" />
+        </>
       )}
       {sortedExercises.map((exercise) => (
         <Workout key={exercise.id} exercise={exercise} />
