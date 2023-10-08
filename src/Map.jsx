@@ -10,8 +10,10 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet"
-
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import { Icon } from "leaflet"
 import "leaflet/dist/leaflet.css"
+
 import { getCoords, setShowForm } from "./features/app/appSlice"
 import { getExercises } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
@@ -61,7 +63,17 @@ export default function Map() {
           const dateStr = formatDate(date)
 
           return (
-            <Marker key={id} position={coords}>
+            <Marker
+              key={id}
+              position={coords}
+              icon={
+                new Icon({
+                  iconUrl: markerIconPng,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                })
+              }
+            >
               <Popup className={`${type}-popup`}>
                 <span>{`${
                   type === "running"
