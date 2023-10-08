@@ -26,7 +26,13 @@ const initialState = {
 const exerciseSlice = createSlice({
   name: "exercise",
   initialState,
-  reducers: {},
+  reducers: {
+    removeExercise(state, action) {
+      state.exercises = state.exercises.filter(
+        (exercise) => exercise.id !== action.payload
+      )
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(addExercise.fulfilled, (state, action) => {
       state.exercises.push(action.payload)
@@ -45,4 +51,5 @@ export const saveExercisesToLocalStorage = (state) => (next) => (action) => {
 
 export const getExercises = (state) => state.exercise.exercises
 
+export const { removeExercise } = exerciseSlice.actions
 export default exerciseSlice.reducer

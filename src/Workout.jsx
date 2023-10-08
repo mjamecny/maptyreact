@@ -1,15 +1,25 @@
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 
 import { formatDate } from "./utils/helpers"
+import { removeExercise } from "./features/exercise/exerciseSlice"
+import toast from "react-hot-toast"
 
 export default function Workout({ exercise }) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { id, date, type, distance, duration, coords } = exercise
   const dateStr = formatDate(date)
 
   function handleChangeCenter(coords) {
     const [lat, lng] = coords
     navigate(`form?lat=${lat}&lng=${lng}`)
+  }
+
+  function handleRemove(id) {
+    dispatch(removeExercise(id))
+
+    toast.success("Exercise removed")
   }
 
   return (
@@ -53,6 +63,9 @@ export default function Workout({ exercise }) {
           {type === "running" ? "spm" : "m"}
         </span>
       </div>
+      <button className="btn-delete" onClick={() => handleRemove(id)}>
+        X
+      </button>
     </li>
   )
 }
