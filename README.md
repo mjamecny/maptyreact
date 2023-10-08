@@ -5,9 +5,14 @@ Mapty is an application that allows users to record and view their workouts on a
 ## Features
 
 - add workout to your list
-- workouts saved to local storage
+- remove workout from your list
+- remove all workouts together
+- sort workouts by date,distance and duration
+- filter workouts by type
 - use your location to start adding workout
+- reverse geocoding to pre-fill form with city name
+- workouts saved to local storage
 
 ## Screenshot
 
-![screenshot](https://i.imgur.com/985FkXN.png)
+![screenshot](https://i.imgur.com/Jpz9hWj.png)
