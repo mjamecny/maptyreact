@@ -27,6 +27,15 @@ body {
   line-height: 1.6;
 }
 
+select {
+  font-family: inherit;
+  font-size: 1.6rem;
+  padding: 0.8rem;
+  text-align: center;
+  outline: none;
+  border-radius: 5px;
+}
+
 /* GENERAL */
 #root {
   height: 100vh;
@@ -63,10 +72,6 @@ a:visited {
   height: 77vh;
   overflow-y: scroll;
   overflow-x: hidden;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 .workouts::-webkit-scrollbar {
   width: 0;
@@ -242,7 +247,6 @@ a:visited {
 .btn--delete-all {
   background-color: var(--color-red--1);
   color: var(--color-light--2);
-  margin-bottom: 1rem;
 }
 
 .btn-delete {
@@ -258,4 +262,10 @@ a:visited {
   top: 4px;
   z-index: 1000;
   font-weight: 700;
+}
+
+.action-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
