@@ -93,7 +93,7 @@ export default function Map() {
 
 function ChangeCenter({ position }) {
   const map = useMap()
-  map.setView(position)
+  map.setView(position, undefined, { animate: true, duration: 0.5 })
   return null
 }
 
