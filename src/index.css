@@ -63,6 +63,10 @@ a:visited {
   height: 77vh;
   overflow-y: scroll;
   overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .workouts::-webkit-scrollbar {
   width: 0;
@@ -233,6 +237,12 @@ a:visited {
   background-color: var(--color-brand--2);
   color: var(--color-dark--1);
   box-shadow: 0 0.4rem 1.2rem rgba(36, 42, 46, 0.16);
+}
+
+.btn--delete-all {
+  background-color: var(--color-red--1);
+  color: var(--color-light--2);
+  margin-bottom: 1rem;
 }
 
 .btn-delete {
