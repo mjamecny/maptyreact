@@ -128,7 +128,7 @@ a:visited {
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem 2.5rem;
   /* Match height and activity boxes */
-  height: 9.25rem;
+  height: 12rem;
   transition: all 0.5s, transform 1ms;
 }
 .form.hidden {
@@ -141,6 +141,9 @@ a:visited {
 .form__row {
   display: flex;
   align-items: center;
+}
+.form__row--city {
+  grid-column: 1 / -1;
 }
 .form__row--hidden {
   display: none;
@@ -285,4 +288,9 @@ a:visited {
   justify-content: center;
   gap: 0.8rem;
   margin-bottom: 1rem;
+}
+
+.no-exercises {
+  font-size: 2rem;
+  text-align: center;
 }

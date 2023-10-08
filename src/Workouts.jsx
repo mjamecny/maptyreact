@@ -74,9 +74,15 @@ export default function Workouts() {
           <Filter filterField="type" />
         </>
       )}
-      {sortedExercises.map((exercise) => (
-        <Workout key={exercise.id} exercise={exercise} />
-      ))}
+      {sortedExercises.length === 0 ? (
+        <p className="no-exercises">
+          There are no exercises. Add some with clicking on the map.
+        </p>
+      ) : (
+        sortedExercises.map((exercise) => (
+          <Workout key={exercise.id} exercise={exercise} />
+        ))
+      )}
     </ul>
   )
 }

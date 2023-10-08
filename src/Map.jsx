@@ -29,12 +29,14 @@ export default function Map() {
 
   useEffect(
     function () {
+      if (!mapLat && !mapLng) return
       if (mapLat && mapLng) setMapPosition([mapLat, mapLng])
     },
     [mapLat, mapLng]
   )
 
   useEffect(() => {
+    if (!geoCords) return
     if (geoCords) setMapPosition(geoCords)
   }, [geoCords])
 

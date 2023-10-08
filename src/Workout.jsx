@@ -8,7 +8,7 @@ import toast from "react-hot-toast"
 export default function Workout({ exercise }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { id, date, type, distance, duration, coords } = exercise
+  const { id, date, type, distance, duration, coords, city } = exercise
   const dateStr = formatDate(date)
 
   function handleChangeCenter(coords) {
@@ -31,7 +31,9 @@ export default function Workout({ exercise }) {
       onClick={() => handleChangeCenter(coords)}
     >
       <h2 className="workout__title">
-        {type === "running" ? `Running on ${dateStr}` : `Cycling on ${dateStr}`}
+        {type === "running"
+          ? `Running on ${dateStr}, ${city}`
+          : `Cycling on ${dateStr}, ${city}`}
       </h2>
       <div className="workout__details">
         <span className="workout__icon">

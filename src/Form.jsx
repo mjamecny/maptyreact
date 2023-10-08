@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import toast from "react-hot-toast"
@@ -6,18 +6,60 @@ import toast from "react-hot-toast"
 import { useUrlPosition } from "./hooks/useUrlPosition"
 import { addExercise } from "./features/exercise/exerciseSlice"
 import { setShowForm } from "./features/app/appSlice"
+import { useNavigate } from "react-router-dom"
 
 export default function Form() {
-  const coords = useUrlPosition()
+  const [lat, lng] = useUrlPosition()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [selectedExercise, setSelectedExercise] = useState("running")
   const [distance, setDistance] = useState("")
   const [duration, setDuration] = useState("")
   const [cadence, setCadence] = useState("")
   const [elevation, setElevation] = useState("")
+  const [cityName, setCityName] = useState("")
 
   const showForm = useSelector((state) => state.app.showForm)
+
+  useEffect(
+    function () {
+      if (lat === null && lng === null) return
+
+      async function fetchCityData() {
+        try {
+          const res = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`
+          )
+          const data = await res.json()
+          if (!data.countryCode)
+            throw new Error(
+              "That doesn't seem to be a city. Click somewhere else."
+            )
+          setCityName(data.city || data.locality || "")
+        } catch (err) {
+          toast.error(err.message)
+        }
+      }
+      fetchCityData()
+    },
+    [lat, lng]
+  )
+
+  useEffect(() => {
+    function handleCloseForm(e) {
+      if (e.keyCode === 27) {
+        dispatch(setShowForm(false))
+        navigate("/")
+      }
+    }
+
+    document.addEventListener("keydown", handleCloseForm)
+
+    return () => {
+      document.removeEventListener("keydown", handleCloseForm)
+    }
+  }, [dispatch, navigate])
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -40,10 +82,11 @@ export default function Form() {
     const exerciseObj = {
       id: crypto.randomUUID(),
       date: new Date().toISOString(),
-      coords,
+      coords: [lat, lng],
       type: selectedExercise,
       distance: Number(distance),
       duration: Number(duration),
+      city: cityName,
       [selectedExercise === "cycling" ? "elevation" : "cadence"]: Number(
         selectedExercise === "cycling" ? elevation : cadence
       ),
@@ -122,6 +165,16 @@ export default function Form() {
           onChange={(e) => setElevation(e.target.value)}
           value={elevation}
           name="elevation"
+        />
+      </div>
+      <div className="form__row form__row--city">
+        <label className="form__label">City</label>
+        <input
+          className="form__input form__input--duration"
+          placeholder="city"
+          onChange={(e) => setCityName(e.target.value)}
+          value={cityName}
+          name="city"
         />
       </div>
       <button className="form__btn">OK</button>
