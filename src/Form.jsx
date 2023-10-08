@@ -177,7 +177,6 @@ export default function Form() {
           name="city"
         />
       </div>
-      <button className="form__btn">OK</button>
     </form>
   )
 }
