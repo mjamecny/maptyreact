@@ -16,9 +16,37 @@ export default function Workouts() {
   const exercises = useSelector(getExercises)
 
   function handleRemoveAll() {
-    dispatch(removeAll())
-    toast.success("All exercises removed")
-    navigate("/")
+    toast((t) => (
+      <span>
+        Are you sure you want to delete all exercises?
+        <div
+          style={{
+            display: "flex",
+            marginTop: "1rem",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
+          <button
+            className="btn-confirm btn-confirm--yes"
+            onClick={() => {
+              dispatch(removeAll())
+              toast.dismiss(t.id)
+              toast.success("All exercises removed")
+              navigate("/")
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="btn-confirm btn-confirm--no"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            No
+          </button>
+        </div>
+      </span>
+    ))
   }
 
   const arrToFilter = [...exercises]

@@ -19,10 +19,37 @@ export default function Workout({ exercise }) {
   }
 
   function handleRemove(id) {
-    dispatch(removeExercise(id))
-    dispatch(setShowForm(false))
-    navigate("/")
-    toast.success("Exercise removed")
+    toast((t) => (
+      <span>
+        Are you sure you want to delete this exercise?
+        <div
+          style={{
+            display: "flex",
+            marginTop: "1rem",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
+          <button
+            className="btn-confirm btn-confirm--yes"
+            onClick={() => {
+              dispatch(removeExercise(id))
+              dispatch(setShowForm(false))
+              navigate("/")
+              toast.success("Exercise removed")
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="btn-confirm btn-confirm--no"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            No
+          </button>
+        </div>
+      </span>
+    ))
   }
 
   function handleEdit(e, id) {
