@@ -38,7 +38,14 @@ const exerciseSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(addExercise.fulfilled, (state, action) => {
-      state.exercises.push(action.payload)
+      const isInArr = state.exercises.some(
+        (exercise) => exercise.id === action.payload.id
+      )
+      if (!isInArr) state.exercises.push(action.payload)
+      const exerciseIndex = state.exercises.findIndex(
+        (exercise) => exercise.id === action.payload.id
+      )
+      state.exercises[exerciseIndex] = action.payload
     })
   },
 })

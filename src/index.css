@@ -252,18 +252,42 @@ a:visited {
   color: var(--color-light--2);
 }
 
+.buttons-container {
+  display: flex;
+  gap: 0.4rem;
+  position: absolute;
+  left: 50%;
+  bottom: -17px;
+  transform: translateX(-50%);
+}
+
 .btn-delete {
   cursor: pointer;
   border: none;
   border-radius: 100px;
   height: 3rem;
   width: 3rem;
-  background-color: var(--color-red--1);
+  background-color: var(--color-dark--1);
   color: var(--color-light--2);
-  position: absolute;
-  right: 4px;
+  /* position: absolute; */
+  /* right: 4px;
   top: 4px;
-  z-index: 1000;
+  z-index: 1000; */
+  font-weight: 700;
+}
+
+.btn-edit {
+  cursor: pointer;
+  border: none;
+  border-radius: 100px;
+  height: 3rem;
+  width: 3rem;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  /* position: absolute; */
+  /* right: 39px;
+  top: 4px; */
+  /* z-index: 1000; */
   font-weight: 700;
 }
 

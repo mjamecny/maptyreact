@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { FaTrash } from "react-icons/fa"
+import { FaTrash, FaPen } from "react-icons/fa"
+import toast from "react-hot-toast"
 
 import { formatDate } from "./utils/helpers"
 import { removeExercise } from "./features/exercise/exerciseSlice"
-import toast from "react-hot-toast"
+import { setIsEditing, setShowForm } from "./features/app/appSlice"
 
 export default function Workout({ exercise }) {
   const navigate = useNavigate()
@@ -21,6 +22,13 @@ export default function Workout({ exercise }) {
     dispatch(removeExercise(id))
 
     toast.success("Exercise removed")
+  }
+
+  function handleEdit(e, id) {
+    e.stopPropagation()
+    dispatch(setShowForm(true))
+    dispatch(setIsEditing(true))
+    navigate(`form?id=${id}&lat=${coords[0]}&lng=${coords[1]}`)
   }
 
   return (
@@ -66,9 +74,14 @@ export default function Workout({ exercise }) {
           {type === "running" ? "spm" : "m"}
         </span>
       </div>
-      <button className="btn-delete" onClick={() => handleRemove(id)}>
-        <FaTrash />
-      </button>
+      <div className="buttons-container">
+        <button className="btn-delete" onClick={() => handleRemove(id)}>
+          <FaTrash />
+        </button>
+        <button className="btn-edit" onClick={(e) => handleEdit(e, id)}>
+          <FaPen />
+        </button>
+      </div>
     </li>
   )
 }

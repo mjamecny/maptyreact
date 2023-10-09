@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import toast from "react-hot-toast"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { useUrlPosition } from "./hooks/useUrlPosition"
-import { addExercise } from "./features/exercise/exerciseSlice"
-import { setShowForm } from "./features/app/appSlice"
-import { useNavigate } from "react-router-dom"
+import { addExercise, getExercises } from "./features/exercise/exerciseSlice"
+import { setIsEditing, setShowForm } from "./features/app/appSlice"
 
 export default function Form() {
   const [lat, lng] = useUrlPosition()
@@ -20,7 +20,30 @@ export default function Form() {
   const [elevation, setElevation] = useState("")
   const [cityName, setCityName] = useState("")
 
-  const showForm = useSelector((state) => state.app.showForm)
+  const { showForm, isEditing } = useSelector((state) => state.app)
+  const exercises = useSelector(getExercises)
+  const [searchParams] = useSearchParams()
+  const editedId = searchParams.get("id")
+  const editedLat = searchParams.get("lat")
+  const editedLng = searchParams.get("lng")
+
+  useEffect(
+    function () {
+      if (isEditing) {
+        const editedExercise = exercises.find(
+          (exercise) => exercise.id === editedId
+        )
+        setSelectedExercise(editedExercise.type)
+        setDistance(editedExercise.distance)
+        setDuration(editedExercise.duration)
+        setCityName(editedExercise.city)
+        editedExercise.type === "running"
+          ? setCadence(editedExercise.cadence)
+          : setElevation(editedExercise.elevation)
+      }
+    },
+    [exercises, isEditing, editedId]
+  )
 
   useEffect(
     function () {
@@ -50,6 +73,7 @@ export default function Form() {
     function handleCloseForm(e) {
       if (e.keyCode === 27) {
         dispatch(setShowForm(false))
+        dispatch(setIsEditing(false))
         navigate("/")
       }
     }
@@ -80,9 +104,9 @@ export default function Form() {
     }
 
     const exerciseObj = {
-      id: crypto.randomUUID(),
+      id: isEditing ? editedId : crypto.randomUUID(),
       date: new Date().toISOString(),
-      coords: [lat, lng],
+      coords: isEditing ? [lat, lng] : [editedLat, editedLng],
       type: selectedExercise,
       distance: Number(distance),
       duration: Number(duration),
@@ -94,7 +118,11 @@ export default function Form() {
 
     dispatch(addExercise(exerciseObj))
     dispatch(setShowForm(false))
-    toast.success("Exercise added")
+    isEditing
+      ? toast.success("Exercise edited")
+      : toast.success("Exercise added")
+    dispatch(setIsEditing(false))
+    navigate("/")
 
     setDistance("")
     setDuration("")
@@ -175,8 +203,10 @@ export default function Form() {
           onChange={(e) => setCityName(e.target.value)}
           value={cityName}
           name="city"
+          disabled={isEditing}
         />
       </div>
+      <button className="form__btn">OK</button>
     </form>
   )
 }
