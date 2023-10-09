@@ -20,7 +20,8 @@ export default function Workout({ exercise }) {
 
   function handleRemove(id) {
     dispatch(removeExercise(id))
-
+    dispatch(setShowForm(false))
+    navigate("/")
     toast.success("Exercise removed")
   }
 
