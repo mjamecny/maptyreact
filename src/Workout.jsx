@@ -10,7 +10,8 @@ import { setIsEditing, setShowForm } from "./features/app/appSlice"
 export default function Workout({ exercise }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { id, date, type, distance, duration, coords, city } = exercise
+  const { id, date, type, distance, duration, coords, city, countryCode } =
+    exercise
   const dateStr = formatDate(date)
 
   function handleChangeCenter(coords) {
@@ -33,6 +34,7 @@ export default function Workout({ exercise }) {
           <button
             className="btn-confirm btn-confirm--yes"
             onClick={() => {
+              toast.dismiss(t.id)
               dispatch(removeExercise(id))
               dispatch(setShowForm(false))
               navigate("/")
@@ -69,8 +71,8 @@ export default function Workout({ exercise }) {
     >
       <h2 className="workout__title">
         {type === "running"
-          ? `Running on ${dateStr}, ${city}`
-          : `Cycling on ${dateStr}, ${city}`}
+          ? `Running on ${dateStr}, ${city} (${countryCode})`
+          : `Cycling on ${dateStr}, ${city} (${countryCode})`}
       </h2>
       <div className="workout__details">
         <span className="workout__icon">

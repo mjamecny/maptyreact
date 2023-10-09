@@ -61,7 +61,7 @@ export default function Map() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {exercises.map((exercise) => {
-          const { id, date, type, coords, city } = exercise
+          const { id, date, type, coords, city, countryCode } = exercise
           const dateStr = formatDate(date)
 
           return (
@@ -72,15 +72,14 @@ export default function Map() {
                 new Icon({
                   iconUrl: markerIconPng,
                   iconSize: [25, 41],
-                  iconAnchor: [12, 41],
                 })
               }
             >
               <Popup className={`${type}-popup`}>
                 <span>{`${
                   type === "running"
-                    ? `🏃‍♂️ Running on ${dateStr}, ${city}`
-                    : `🚴‍♀️ Cycling on ${dateStr}, ${city}`
+                    ? `🏃‍♂️ Running on ${dateStr}, ${city} (${countryCode})`
+                    : `🚴‍♀️ Cycling on ${dateStr}, ${city} (${countryCode})`
                 }`}</span>
               </Popup>
             </Marker>

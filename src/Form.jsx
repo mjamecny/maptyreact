@@ -19,6 +19,7 @@ export default function Form() {
   const [cadence, setCadence] = useState("")
   const [elevation, setElevation] = useState("")
   const [cityName, setCityName] = useState("")
+  const [countryCode, setCountryCode] = useState("")
 
   const { showForm, isEditing } = useSelector((state) => state.app)
   const exercises = useSelector(getExercises)
@@ -37,6 +38,7 @@ export default function Form() {
       setDistance(editedExercise.distance)
       setDuration(editedExercise.duration)
       setCityName(editedExercise.city)
+      setCountryCode(editedExercise.countryCode)
       editedExercise.type === "running"
         ? setCadence(editedExercise.cadence)
         : setElevation(editedExercise.elevation)
@@ -59,6 +61,7 @@ export default function Form() {
               "That doesn't seem to be a city. Click somewhere else."
             )
           setCityName(data.city || data.locality || "")
+          setCountryCode(data.countryCode)
         } catch (err) {
           toast.error(err.message)
         }
@@ -110,6 +113,7 @@ export default function Form() {
       distance: Number(distance),
       duration: Number(duration),
       city: cityName,
+      countryCode,
       [selectedExercise === "cycling" ? "elevation" : "cadence"]: Number(
         selectedExercise === "cycling" ? elevation : cadence
       ),
