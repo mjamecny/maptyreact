@@ -29,18 +29,17 @@ export default function Form() {
 
   useEffect(
     function () {
-      if (isEditing) {
-        const editedExercise = exercises.find(
-          (exercise) => exercise.id === editedId
-        )
-        setSelectedExercise(editedExercise.type)
-        setDistance(editedExercise.distance)
-        setDuration(editedExercise.duration)
-        setCityName(editedExercise.city)
-        editedExercise.type === "running"
-          ? setCadence(editedExercise.cadence)
-          : setElevation(editedExercise.elevation)
-      }
+      if (!isEditing) return
+      const editedExercise = exercises.find(
+        (exercise) => exercise.id === editedId
+      )
+      setSelectedExercise(editedExercise.type)
+      setDistance(editedExercise.distance)
+      setDuration(editedExercise.duration)
+      setCityName(editedExercise.city)
+      editedExercise.type === "running"
+        ? setCadence(editedExercise.cadence)
+        : setElevation(editedExercise.elevation)
     },
     [exercises, isEditing, editedId]
   )
@@ -118,17 +117,16 @@ export default function Form() {
 
     dispatch(addExercise(exerciseObj))
     dispatch(setShowForm(false))
-    isEditing
-      ? toast.success("Exercise edited")
-      : toast.success("Exercise added")
-    dispatch(setIsEditing(false))
-    navigate("/")
-
     setDistance("")
     setDuration("")
     setCadence("")
     setElevation("")
     setSelectedExercise("running")
+    isEditing
+      ? toast.success("Exercise edited")
+      : toast.success("Exercise added")
+    dispatch(setIsEditing(false))
+    navigate("/")
   }
 
   return (
