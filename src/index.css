@@ -49,7 +49,7 @@ select {
 
 a:link,
 a:visited {
-  color: var(--color-brand--1);
+  /* color: var(--color-brand--1); */
 }
 
 /* SIDEBAR */

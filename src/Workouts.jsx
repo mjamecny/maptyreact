@@ -8,8 +8,9 @@ import SortBy from "./SortBy"
 import Filter from "./Filter"
 
 import { getExercises, removeAll } from "./features/exercise/exerciseSlice"
+import { setIsEditing, setShowForm } from "./features/app/appSlice"
 
-export default function Workouts() {
+export default function Workouts({ mapRef }) {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -30,6 +31,8 @@ export default function Workouts() {
           <button
             className="btn-confirm btn-confirm--yes"
             onClick={() => {
+              dispatch(setIsEditing(false))
+              dispatch(setShowForm(false))
               dispatch(removeAll())
               toast.dismiss(t.id)
               toast.success("All exercises removed")
@@ -90,7 +93,7 @@ export default function Workouts() {
 
   return (
     <ul className="workouts">
-      <Form />
+      <Form mapRef={mapRef} />
       {exercises.length > 0 && (
         <>
           <div className="action-container">

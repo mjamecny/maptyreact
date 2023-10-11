@@ -13,6 +13,7 @@ export const getCoords = createAsyncThunk("app/getCoords", async function () {
 
 const initialState = {
   coords: null,
+  geoData: {},
   showForm: false,
   isEditing: false,
   status: "idle",
@@ -29,6 +30,9 @@ const appSlice = createSlice({
     setIsEditing: (state, action) => {
       state.isEditing = action.payload
     },
+    setGeoData: (state, action) => {
+      state.geoData = action.payload
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -44,5 +48,5 @@ const appSlice = createSlice({
         state.error = "There was a problem getting your coordinates"
       }),
 })
-export const { setShowForm, setIsEditing } = appSlice.actions
+export const { setShowForm, setIsEditing, setGeoData } = appSlice.actions
 export default appSlice.reducer

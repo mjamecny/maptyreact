@@ -61,5 +61,10 @@ export const saveExercisesToLocalStorage = (state) => (next) => (action) => {
 
 export const getExercises = (state) => state.exercise.exercises
 
+export const getExerciseById = (state, exerciseId) => {
+  const exercises = state.exercise.exercises
+  return exercises.find((exercise) => exercise.id === exerciseId)
+}
+
 export const { removeExercise, removeAll } = exerciseSlice.actions
 export default exerciseSlice.reducer

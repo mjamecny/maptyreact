@@ -1,31 +1,49 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useEffect } from "react"
 import {
   MapContainer,
   TileLayer,
-  Marker,
   Popup,
   useMap,
-  useMapEvents,
+  GeoJSON,
+  FeatureGroup,
+  useMapEvent,
 } from "react-leaflet"
-import markerIconPng from "leaflet/dist/images/marker-icon.png"
-import { Icon } from "leaflet"
+import { EditControl } from "react-leaflet-draw"
+import "leaflet-draw/dist/leaflet.draw.css"
 import "leaflet/dist/leaflet.css"
 
-import { getCoords, setShowForm } from "./features/app/appSlice"
-import { getExercises } from "./features/exercise/exerciseSlice"
+import { getCoords, setGeoData, setShowForm } from "./features/app/appSlice"
+import { getExerciseById } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
 import { formatDate } from "./utils/helpers"
 
-export default function Map() {
-  const exercises = useSelector(getExercises)
-  const { coords: geoCords, status } = useSelector((state) => state.app)
+export default function Map({ mapRef }) {
+  const [searchParams] = useSearchParams()
+  const exerciseId = searchParams.get("id")
+  const state = useSelector((state) => state)
+  const exercise = exerciseId && getExerciseById(state, exerciseId)
+  const { id, date, type, geoData, city, countryCode } = exercise || {}
+  const dateStr = formatDate(date)
 
+  const { coords: geoCords, status } = useSelector((state) => state.app)
   const [mapPosition, setMapPosition] = useState([40, 0])
   const [mapLat, mapLng] = useUrlPosition()
   const dispatch = useDispatch()
+
+  const popupRef = useRef(null)
+
+  useEffect(
+    function () {
+      const popup = popupRef.current
+      if (popup) {
+        popup.openPopup()
+      }
+    },
+    [popupRef.current]
+  )
 
   useEffect(
     function () {
@@ -56,37 +74,48 @@ export default function Map() {
         scrollWheelZoom={true}
         id="map"
       >
+        <FeatureGroup ref={mapRef}>
+          <EditControl
+            position="topright"
+            draw={{
+              polyline: true,
+              polygon: false,
+              circle: false,
+              rectangle: false,
+              circlemarker: false,
+              marker: false,
+            }}
+          />
+        </FeatureGroup>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {exercises.map((exercise) => {
-          const { id, date, type, coords, city, countryCode } = exercise
-          const dateStr = formatDate(date)
-
-          return (
-            <Marker
-              key={id}
-              position={coords}
-              icon={
-                new Icon({
-                  iconUrl: markerIconPng,
-                  iconSize: [25, 41],
-                })
-              }
-            >
-              <Popup className={`${type}-popup`}>
-                <span>{`${
-                  type === "running"
-                    ? `🏃‍♂️ Running on ${dateStr}, ${city} (${countryCode})`
-                    : `🚴‍♀️ Cycling on ${dateStr}, ${city} (${countryCode})`
-                }`}</span>
-              </Popup>
-            </Marker>
-          )
-        })}
+        {exerciseId && (
+          <GeoJSON
+            ref={popupRef}
+            key={id}
+            data={geoData}
+            style={{
+              color: `${
+                type === "running"
+                  ? "var(--color-brand--2)"
+                  : "var(--color-brand--1)"
+              }`,
+              weight: 7,
+            }}
+          >
+            <Popup className={`${type}-popup`}>
+              <span>{`${
+                type === "running"
+                  ? `🏃‍♂️ Running on ${dateStr}, ${city} (${countryCode})`
+                  : `🚴‍♀️ Cycling on ${dateStr}, ${city} (${countryCode})`
+              }`}</span>
+            </Popup>
+          </GeoJSON>
+        )}
         <ChangeCenter position={mapPosition} />
-        <DetectClick />
+        <DetectDraw />
       </MapContainer>
     </div>
   )
@@ -94,17 +123,46 @@ export default function Map() {
 
 function ChangeCenter({ position }) {
   const map = useMap()
-  map.setView(position, undefined, { animate: true, duration: 0.5 })
+  map.flyTo(position, 16)
   return null
 }
 
-function DetectClick() {
-  const navigate = useNavigate()
+function DetectDraw() {
   const dispatch = useDispatch()
-  useMapEvents({
-    click: (e) => {
-      dispatch(setShowForm(true))
-      navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`)
-    },
+  const navigate = useNavigate()
+
+  const map = useMapEvent("draw:created", (e) => {
+    const coordinates = e.layer._latlngs.map((x) => {
+      return [x.lng, x.lat]
+    })
+
+    const totalDistance = coordinates.reduce((acc, curPoint, i) => {
+      if (i < coordinates.length - 1) {
+        const distance = map.distance(curPoint, coordinates[i + 1])
+        return acc + distance
+      }
+      return acc
+    }, 0)
+
+    const geoJSON = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            coordinates,
+            type: "LineString",
+          },
+        },
+      ],
+    }
+
+    dispatch(setGeoData(geoJSON))
+    dispatch(setShowForm(true))
+    navigate(
+      `form?lat=${coordinates[0][1]}&lng=${coordinates[0][0]}&totalDistance=${totalDistance}`
+    )
   })
+  return null
 }

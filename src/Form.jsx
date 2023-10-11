@@ -8,8 +8,8 @@ import { useUrlPosition } from "./hooks/useUrlPosition"
 import { addExercise, getExercises } from "./features/exercise/exerciseSlice"
 import { setIsEditing, setShowForm } from "./features/app/appSlice"
 
-export default function Form() {
-  const [lat, lng] = useUrlPosition()
+export default function Form({ mapRef }) {
+  const [lat, lng, totalDistance] = useUrlPosition()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -21,7 +21,7 @@ export default function Form() {
   const [cityName, setCityName] = useState("")
   const [countryCode, setCountryCode] = useState("")
 
-  const { showForm, isEditing } = useSelector((state) => state.app)
+  const { showForm, isEditing, geoData } = useSelector((state) => state.app)
   const exercises = useSelector(getExercises)
   const [searchParams] = useSearchParams()
   const editedId = searchParams.get("id")
@@ -67,8 +67,11 @@ export default function Form() {
         }
       }
       fetchCityData()
+      if (!isEditing) {
+        setDistance((totalDistance / 1000).toFixed(2))
+      }
     },
-    [lat, lng]
+    [lat, lng, totalDistance, isEditing]
   )
 
   useEffect(() => {
@@ -109,6 +112,7 @@ export default function Form() {
       id: isEditing ? editedId : crypto.randomUUID(),
       date: new Date().toISOString(),
       coords: isEditing ? [lat, lng] : [editedLat, editedLng],
+      geoData,
       type: selectedExercise,
       distance: Number(distance),
       duration: Number(duration),
@@ -130,7 +134,12 @@ export default function Form() {
       ? toast.success("Exercise edited")
       : toast.success("Exercise added")
     dispatch(setIsEditing(false))
-    navigate("/")
+    navigate(
+      `form?id=${exerciseObj.id}&lat=${exerciseObj.coords[0]}&lng=${exerciseObj.coords[1]}`
+    )
+
+    const layerKey = Object.keys(mapRef.current._layers)[0]
+    mapRef.current.removeLayer(mapRef.current._layers[layerKey])
   }
 
   return (
@@ -157,6 +166,7 @@ export default function Form() {
           onChange={(e) => setDistance(e.target.value)}
           value={distance}
           name="distance"
+          disabled={isEditing}
         />
       </div>
       <div className="form__row">

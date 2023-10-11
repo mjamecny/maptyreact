@@ -16,7 +16,8 @@ export default function Workout({ exercise }) {
 
   function handleChangeCenter(coords) {
     const [lat, lng] = coords
-    navigate(`form?lat=${lat}&lng=${lng}`)
+    dispatch(setShowForm(false))
+    navigate(`form?lat=${lat}&lng=${lng}&id=${id}`)
   }
 
   function handleRemove(id) {
