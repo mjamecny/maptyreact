@@ -16,4 +16,4 @@ Mapty is an application that allows users to record and view their workouts on a
 
 ## Screenshot
 
-![screenshot](https://i.imgur.com/Jpz9hWj.png)
+![screenshot](https://i.imgur.com/ZJY2pKD.png)
