@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { useRef, useState } from "react"
 import { useEffect } from "react"
@@ -18,22 +18,23 @@ import "leaflet/dist/leaflet.css"
 import { getCoords, setGeoData, setShowForm } from "./features/app/appSlice"
 import { getExerciseById } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
+import { useUrlId } from "./hooks/useUrlId"
 import { formatDate } from "./utils/helpers"
 
 export default function Map({ mapRef }) {
-  const [searchParams] = useSearchParams()
-  const exerciseId = searchParams.get("id")
-  const state = useSelector((state) => state)
-  const exercise = exerciseId && getExerciseById(state, exerciseId)
+  const dispatch = useDispatch()
+  const popupRef = useRef(null)
+
+  const exerciseId = useUrlId()
+  const [mapLat, mapLng] = useUrlPosition()
+
+  const exercise = useSelector((state) => getExerciseById(state, exerciseId))
   const { id, date, type, geoData, city, countryCode } = exercise || {}
+  const { coords: geoCords, status } = useSelector((state) => state.app)
+
   const dateStr = formatDate(date)
 
-  const { coords: geoCords, status } = useSelector((state) => state.app)
   const [mapPosition, setMapPosition] = useState([40, 0])
-  const [mapLat, mapLng] = useUrlPosition()
-  const dispatch = useDispatch()
-
-  const popupRef = useRef(null)
 
   useEffect(
     function () {
@@ -70,7 +71,7 @@ export default function Map({ mapRef }) {
       )}
       <MapContainer
         center={mapPosition}
-        zoom={13}
+        zoom={6}
         scrollWheelZoom={true}
         id="map"
       >
@@ -123,7 +124,7 @@ export default function Map({ mapRef }) {
 
 function ChangeCenter({ position }) {
   const map = useMap()
-  map.flyTo(position, 16)
+  map.setView(position)
   return null
 }
 
