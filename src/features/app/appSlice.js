@@ -24,6 +24,9 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    setCoords: (state, action) => {
+      state.coords = action.payload
+    },
     setShowForm: (state, action) => {
       state.showForm = action.payload
     },
@@ -48,5 +51,6 @@ const appSlice = createSlice({
         state.error = "There was a problem getting your coordinates"
       }),
 })
-export const { setShowForm, setIsEditing, setGeoData } = appSlice.actions
+export const { setShowForm, setIsEditing, setGeoData, setCoords } =
+  appSlice.actions
 export default appSlice.reducer

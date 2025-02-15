@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import Map from "./Map"
 import Sidebar from "./Sidebar"
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useEffect } from "react"
 import {
   MapContainer,
@@ -34,8 +34,6 @@ export default function Map({ mapRef }) {
 
   const dateStr = formatDate(date)
 
-  const [mapPosition, setMapPosition] = useState([40, 0])
-
   useEffect(
     function () {
       const popup = popupRef.current
@@ -49,75 +47,71 @@ export default function Map({ mapRef }) {
   useEffect(
     function () {
       if (!mapLat && !mapLng) return
-      if (mapLat && mapLng) setMapPosition([mapLat, mapLng])
+      if (mapLat && mapLng) dispatch(geoCords)
     },
-    [mapLat, mapLng]
+    [mapLat, mapLng, dispatch, geoCords]
   )
-
-  useEffect(() => {
-    if (!geoCords) return
-    if (geoCords) setMapPosition(geoCords)
-  }, [geoCords])
 
   return (
     <div className="map-container">
-      {!geoCords && (
-        <button
-          className="btn btn--position"
-          onClick={() => dispatch(getCoords())}
-        >
-          {status === "loading" ? "Loading..." : "Use your position"}
-        </button>
-      )}
-      <MapContainer
-        center={mapPosition}
-        zoom={6}
-        scrollWheelZoom={true}
-        id="map"
+      <button
+        className="btn btn--position"
+        onClick={() => dispatch(getCoords())}
       >
-        <FeatureGroup ref={mapRef}>
-          <EditControl
-            position="topright"
-            draw={{
-              polyline: true,
-              polygon: false,
-              circle: false,
-              rectangle: false,
-              circlemarker: false,
-              marker: false,
-            }}
+        {status === "loading" ? "Loading..." : "Use your position"}
+      </button>
+
+      {geoCords && (
+        <MapContainer
+          center={geoCords}
+          zoom={6}
+          scrollWheelZoom={true}
+          id="map"
+        >
+          <FeatureGroup ref={mapRef}>
+            <EditControl
+              position="topright"
+              draw={{
+                polyline: true,
+                polygon: false,
+                circle: false,
+                rectangle: false,
+                circlemarker: false,
+                marker: false,
+              }}
+            />
+          </FeatureGroup>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        </FeatureGroup>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {exerciseId && (
-          <GeoJSON
-            ref={popupRef}
-            key={id}
-            data={geoData}
-            style={{
-              color: `${
-                type === "running"
-                  ? "var(--color-brand--2)"
-                  : "var(--color-brand--1)"
-              }`,
-              weight: 7,
-            }}
-          >
-            <Popup className={`${type}-popup`}>
-              <span>{`${
-                type === "running"
-                  ? `🏃‍♂️ Running on ${dateStr}, ${city} (${countryCode})`
-                  : `🚴‍♀️ Cycling on ${dateStr}, ${city} (${countryCode})`
-              }`}</span>
-            </Popup>
-          </GeoJSON>
-        )}
-        <ChangeCenter position={mapPosition} />
-        <DetectDraw />
-      </MapContainer>
+          {exerciseId && (
+            <GeoJSON
+              ref={popupRef}
+              key={id}
+              data={geoData}
+              style={{
+                color: `${
+                  type === "running"
+                    ? "var(--color-brand--2)"
+                    : "var(--color-brand--1)"
+                }`,
+                weight: 7,
+              }}
+            >
+              <Popup className={`${type}-popup`}>
+                <span>{`${
+                  type === "running"
+                    ? `🏃‍♂️ Running on ${dateStr}, ${city} (${countryCode})`
+                    : `🚴‍♀️ Cycling on ${dateStr}, ${city} (${countryCode})`
+                }`}</span>
+              </Popup>
+            </GeoJSON>
+          )}
+          <ChangeCenter position={geoCords} />
+          <DetectDraw />
+        </MapContainer>
+      )}
     </div>
   )
 }

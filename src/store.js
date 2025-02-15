@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 
-import appReducer from "./features/app/appSlice"
+import appReducer, { getCoords } from "./features/app/appSlice"
 import exerciseReducer, {
   saveExercisesToLocalStorage,
 } from "./features/exercise/exerciseSlice"
@@ -10,5 +10,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(saveExercisesToLocalStorage),
 })
+
+store.dispatch(getCoords())
 
 export default store
