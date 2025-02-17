@@ -12,7 +12,7 @@ export const getCoords = createAsyncThunk("app/getCoords", async function () {
 })
 
 const initialState = {
-  coords: null,
+  coords: [45, 14],
   geoData: {},
   showForm: false,
   isEditing: false,

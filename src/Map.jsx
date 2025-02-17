@@ -15,7 +15,12 @@ import { EditControl } from "react-leaflet-draw"
 import "leaflet-draw/dist/leaflet.draw.css"
 import "leaflet/dist/leaflet.css"
 
-import { getCoords, setGeoData, setShowForm } from "./features/app/appSlice"
+import {
+  getCoords,
+  setGeoData,
+  setShowForm,
+  setCoords,
+} from "./features/app/appSlice"
 import { getExerciseById } from "./features/exercise/exerciseSlice"
 import { useUrlPosition } from "./hooks/useUrlPosition"
 import { useUrlId } from "./hooks/useUrlId"
@@ -34,22 +39,19 @@ export default function Map({ mapRef }) {
 
   const dateStr = formatDate(date)
 
-  useEffect(
-    function () {
-      const popup = popupRef.current
-      if (popup) {
-        popup.openPopup()
-      }
-    },
-    [popupRef.current]
-  )
+  useEffect(function () {
+    const popup = popupRef.current
+    if (popup) {
+      popup.openPopup()
+    }
+  }, [])
 
   useEffect(
     function () {
       if (!mapLat && !mapLng) return
-      if (mapLat && mapLng) dispatch(geoCords)
+      if (mapLat && mapLng) setCoords(geoCords)
     },
-    [mapLat, mapLng, dispatch, geoCords]
+    [mapLat, mapLng, geoCords]
   )
 
   return (
@@ -64,7 +66,7 @@ export default function Map({ mapRef }) {
       {geoCords && (
         <MapContainer
           center={geoCords}
-          zoom={6}
+          zoom={13}
           scrollWheelZoom={true}
           id="map"
         >
